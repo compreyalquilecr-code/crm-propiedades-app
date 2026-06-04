@@ -21,16 +21,18 @@ app.get("/propiedades", async (req, res) => {
   try {
 
     const respuesta =
-      await notion.dataSources.query({
+      await notion.databases.query({
 
-        data_source_id: DATABASE_ID
+        database_id: DATABASE_ID
 
       });
 
     const propiedades =
       respuesta.results.map((item) => {
 
-        const p = item.properties;
+       const p = item.properties;
+
+console.log("COLUMNAS:", Object.keys(p));
 
         return {
 
@@ -40,24 +42,89 @@ app.get("/propiedades", async (req, res) => {
             "Sin nombre",
 
           provincia:
-            p.Provincia?.select?.name ||
+            p.Provincia
+              ?.select?.name ||
+
+            p.Provincia
+              ?.rich_text?.[0]
+              ?.plain_text ||
+
             "",
 
           negocio:
-            p.Negocio?.select?.name ||
+            p.Negocio
+              ?.select?.name ||
+
+            p.Negocio
+              ?.rich_text?.[0]
+              ?.plain_text ||
+
             "",
 
           precio:
             p.Precio?.number || 0,
 
           habitaciones:
-            p.Habitaciones?.number || 0,
+            p.Habitaciones
+              ?.number || 0,
 
           banos:
-            p["Baños"]?.number || 0,
+            p["Baños"]
+              ?.number || 0,
 
-          foto:
-            p.Fotos?.url || ""
+          contacto:
+
+            p.Contacto
+              ?.rich_text?.[0]
+              ?.plain_text ||
+
+            p.Contacto
+              ?.phone_number ||
+
+            p.Contacto
+              ?.title?.[0]
+              ?.plain_text ||
+
+            "",
+
+          corredor:
+
+            p.Corredor
+              ?.rich_text?.[0]
+              ?.plain_text ||
+
+            p.Corredor
+              ?.title?.[0]
+              ?.plain_text ||
+
+            "",
+
+          comision:
+
+            p.Comision
+              ?.rich_text?.[0]
+              ?.plain_text ||
+
+            p.Comision
+              ?.number ||
+
+            p.Comision
+              ?.title?.[0]
+              ?.plain_text ||
+
+            "",
+
+          informacion:
+
+            p.Informacion
+              ?.rich_text?.[0]
+              ?.plain_text ||
+
+            p.Informacion
+              ?.title?.[0]
+              ?.plain_text ||
+
+            ""
 
         };
 

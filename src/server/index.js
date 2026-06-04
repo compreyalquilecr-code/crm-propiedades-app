@@ -13,67 +13,96 @@ const notion = new Client({
   auth: process.env.NOTION_TOKEN
 });
 
-const DATABASE_ID =
-  process.env.NOTION_DATABASE_ID;
+const DATABASE_ID = process.env.NOTION_DATABASE_ID;
 
 app.get("/propiedades", async (req, res) => {
 
   try {
 
-    const respuesta =
-      await notion.dataSources.query({
+    const respuesta = await notion.dataSources.query({
+      data_source_id: DATABASE_ID
+    });
 
-        data_source_id: DATABASE_ID
+    const propiedades = respuesta.results.map((item) => {
 
-      });
+      const p = item.properties;
 
-    const propiedades =
-      respuesta.results.map((item) => {
+      return {
 
-        const p = item.properties;
+        nombre:
+          p.Nombre?.title?.[0]?.plain_text ||
+          "Sin nombre",
 
-        return {
+        provincia:
+          p.Provincia?.select?.name ||
+          "",
 
-          nombre:
-            p.Nombre?.title?.[0]
-              ?.plain_text ||
-            "Sin nombre",
+        canton:
+          p["Cantón"]?.rich_text?.[0]?.plain_text ||
+          "",
 
-          provincia:
-            p.Provincia
-              ?.select?.name ||
-            "",
+        distrito:
+          p["Distrito"]?.rich_text?.[0]?.plain_text ||
+          "",
 
-          negocio:
-            p.Negocio
-              ?.select?.name ||
-            "",
+        negocio:
+          p.Negocio?.select?.name ||
+          "",
 
-          precio:
-            p.Precio?.number || 0,
+        tipoPropiedad:
+          p["Tipo de propiedad"]?.select?.name ||
+          "",
 
-          habitaciones:
-            p.Habitaciones
-              ?.number || 0,
+        precio:
+          p.Precio?.number || 0,
 
-          banos:
-            p["Baños"]
-              ?.number || 0
+        habitaciones:
+          p.Habitaciones?.number || 0,
 
-        };
+        banos:
+          p["Baños"]?.number || 0,
 
-      });
+        parqueo:
+          p.Parqueo?.number || 0,
+
+        terreno:
+          p["Terreno m²"]?.number || 0,
+
+        construccion:
+          p["Construcción m²"]?.number || 0,
+
+        contacto:
+          p.Contacto?.rich_text?.[0]?.plain_text ||
+          "",
+
+        corredor:
+          p.Corredor?.rich_text?.[0]?.plain_text ||
+          "",
+
+        comision:
+          p["Comisión"]?.rich_text?.[0]?.plain_text ||
+          "",
+
+        informacion:
+          p["Información"]?.rich_text?.[0]?.plain_text ||
+          "",
+
+        fichaTecnica:
+          p["Ficha técnica"]?.rich_text?.[0]?.plain_text ||
+          ""
+
+      };
+
+    });
 
     res.json(propiedades);
 
-  }
-
-  catch(error){
+  } catch (error) {
 
     console.log(error);
 
     res.status(500).json({
-      error:error.message
+      error: error.message
     });
 
   }
@@ -82,8 +111,6 @@ app.get("/propiedades", async (req, res) => {
 
 app.listen(3001, () => {
 
-  console.log(
-    "Servidor en puerto 3001"
-  );
+  console.log("Servidor en puerto 3001");
 
 });

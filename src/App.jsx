@@ -216,16 +216,61 @@ function App() {
               {seleccionada.negocio}
             </p>
 
+            {seleccionada.corredor && (
+
+              <p>
+                👨‍💼 Corredor:
+                {" "}
+                {seleccionada.corredor}
+              </p>
+
+            )}
+
+            {seleccionada.contacto && (
+
+              <p>
+                📞 Contacto:
+                {" "}
+                {seleccionada.contacto}
+              </p>
+
+            )}
+
+            {seleccionada.comision && (
+
+              <p>
+                💰 Comisión:
+                {" "}
+                {seleccionada.comision}
+              </p>
+
+            )}
+
+            {seleccionada.informacion && (
+
+              <div>
+
+                <p>
+                  📋 Información:
+                </p>
+
+                <p>
+                  {seleccionada.informacion}
+                </p>
+
+              </div>
+
+            )}
+
             <button
-              className="cerrar"
-              onClick={() =>
-                setSeleccionada(null)
-              }
-            >
-
-              Cerrar
-
-            </button>
+  className="cerrar"
+  onClick={() =>
+    setSeleccionada(null)
+  }
+>
+  Cerrar
+</button>
+          
 
           </div>
 
