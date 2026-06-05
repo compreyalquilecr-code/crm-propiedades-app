@@ -5,83 +5,39 @@ import "./App.css";
 import logo from "./assets/logo.png.png";
 
 function App() {
-
   const [propiedades, setPropiedades] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [seleccionada, setSeleccionada] = useState(null);
 
   useEffect(() => {
-
     async function cargar() {
-
       try {
-
-       const datos = await getPropiedades();
-
-console.log("DATOS RECIBIDOS:", datos);
-
-setPropiedades(datos);
-
+        const datos = await getPropiedades();
         setPropiedades(datos);
-
       } catch (error) {
-
         console.error(error);
-
       }
-
     }
 
     cargar();
-
   }, []);
 
-const filtradas = propiedades.filter((p) => {
+  const filtradas = propiedades.filter((p) => {
+    if (busqueda.trim() === "") return false;
 
-  console.log("PROPIEDADES:", propiedades);
-  console.log("BUSQUEDA:", busqueda);
+    const texto = busqueda.toLowerCase();
 
-  if (busqueda.trim() === "") {
-    return true;
-  }
-
-  const texto = busqueda.toLowerCase();
-
-  return (
-
-    (p.nombre || "")
-      .toLowerCase()
-      .includes(texto)
-
-    ||
-
-    (p.provincia || "")
-      .toLowerCase()
-      .includes(texto)
-
-    ||
-
-    (p.negocio || "")
-      .toLowerCase()
-      .includes(texto)
-
-    ||
-
-    String(
-      p.precio || ""
-    ).includes(busqueda)
-
-  );
-
-});
-
+    return (
+      (p.nombre || "").toLowerCase().includes(texto) ||
+      (p.provincia || "").toLowerCase().includes(texto) ||
+      (p.negocio || "").toLowerCase().includes(texto) ||
+      String(p.precio || "").includes(busqueda)
+    );
+  });
 
   return (
-
     <div className="contenedor">
-
       <div className="header">
-
         <img
           src={logo}
           alt="logo"
@@ -91,113 +47,80 @@ const filtradas = propiedades.filter((p) => {
         <h1 className="titulo">
           CRM Inmobiliario
         </h1>
-
       </div>
 
       <div className="buscador">
-
         <input
           type="text"
           placeholder="Buscar propiedad, provincia o precio..."
           value={busqueda}
-          onChange={(e)=>
-            setBusqueda(e.target.value)
-          }
+          onChange={(e) => setBusqueda(e.target.value)}
         />
-
       </div>
 
-      <div className="tablaContainer">
+      {busqueda.trim() !== "" && (
 
+        <div className="resultados">
 
-      
+          {filtradas.length === 0 ? (
 
-          <table className="tabla">
+            <div className="sinResultados">
+              No se encontraron propiedades.
+            </div>
 
-            <thead>
+          ) : (
 
-              <tr>
+            filtradas.map((p, i) => (
 
-                <th>Propiedad</th>
-                <th>Provincia</th>
-                <th>Negocio</th>
-                <th>Precio</th>
+              <div
+                key={i}
+                className="cardResultado"
+                onClick={() => setSeleccionada(p)}
+              >
+                <h3>{p.nombre}</h3>
 
-              </tr>
+                <p>
+                  📍 {p.provincia}
+                </p>
 
-            </thead>
+                <p>
+                  💰 $
+                  {p.precio?.toLocaleString()}
+                </p>
 
-            <tbody>
+                <span className="badge">
+                  {p.negocio}
+                </span>
+              </div>
 
-              {filtradas.map((p, i)=>(
+            ))
 
-                <tr
-                  key={i}
-                  onClick={() =>
-                    setSeleccionada(p)
-                  }
-                >
-
-                  <td>{p.nombre}</td>
-
-                  <td>{p.provincia}</td>
-
-                  <td>
-
-                    <span className="badge">
-                      {p.negocio}
-                    </span>
-
-                  </td>
-
-                  <td>
-
-                    $
-                    {p.precio?.toLocaleString()}
-
-                  </td>
-
-                </tr>
-
-              ))}
-
-            </tbody>
-
-          </table>
+          )}
 
         </div>
 
+      )}
 
       {seleccionada && (
 
         <div
           className="modalFondo"
-          onClick={() =>
-            setSeleccionada(null)
-          }
+          onClick={() => setSeleccionada(null)}
         >
 
           <div
             className="modal"
-            onClick={(e)=>
-              e.stopPropagation()
-            }
+            onClick={(e) => e.stopPropagation()}
           >
 
-            <h2>
-              {seleccionada.nombre}
-            </h2>
+            <h2>{seleccionada.nombre}</h2>
 
             <p>
-              📍 Provincia:
-              {" "}
-              {seleccionada.provincia}
+              📍 Provincia: {seleccionada.provincia}
             </p>
 
             <p>
-              💰 Precio:
-              {" "}
-              $
+              💰 Precio: $
               {seleccionada.precio?.toLocaleString()}
             </p>
 
@@ -220,60 +143,42 @@ const filtradas = propiedades.filter((p) => {
             </p>
 
             {seleccionada.corredor && (
-
               <p>
                 👨‍💼 Corredor:
                 {" "}
                 {seleccionada.corredor}
               </p>
-
             )}
 
             {seleccionada.contacto && (
-
               <p>
                 📞 Contacto:
                 {" "}
                 {seleccionada.contacto}
               </p>
-
             )}
 
             {seleccionada.comision && (
-
               <p>
                 💰 Comisión:
                 {" "}
                 {seleccionada.comision}
               </p>
-
             )}
 
             {seleccionada.informacion && (
-
               <div>
-
-                <p>
-                  📋 Información:
-                </p>
-
-                <p>
-                  {seleccionada.informacion}
-                </p>
-
+                <p>📋 Información:</p>
+                <p>{seleccionada.informacion}</p>
               </div>
-
             )}
 
             <button
-  className="cerrar"
-  onClick={() =>
-    setSeleccionada(null)
-  }
->
-  Cerrar
-</button>
-          
+              className="cerrar"
+              onClick={() => setSeleccionada(null)}
+            >
+              Cerrar
+            </button>
 
           </div>
 
@@ -282,9 +187,7 @@ const filtradas = propiedades.filter((p) => {
       )}
 
     </div>
-
   );
-
 }
 
 export default App;
