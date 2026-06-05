@@ -36,41 +36,42 @@ setPropiedades(datos);
 
   }, []);
 
-  const filtradas = propiedades.filter((p) => {
+const filtradas = propiedades.filter((p) => {
 
-console.log("PROPIEDADES:", propiedades);
-console.log("BUSQUEDA:", busqueda);
-}
+  console.log("PROPIEDADES:", propiedades);
+  console.log("BUSQUEDA:", busqueda);
 
-const texto = busqueda.toLowerCase();
+  if (busqueda.trim() === "") {
+    return true;
+  }
 
-return (
+  const texto = busqueda.toLowerCase();
 
-```
-(p.nombre || "")
-  .toLowerCase()
-  .includes(texto)
+  return (
 
-||
+    (p.nombre || "")
+      .toLowerCase()
+      .includes(texto)
 
-(p.provincia || "")
-  .toLowerCase()
-  .includes(texto)
+    ||
 
-||
+    (p.provincia || "")
+      .toLowerCase()
+      .includes(texto)
 
-(p.negocio || "")
-  .toLowerCase()
-  .includes(texto)
+    ||
 
-||
+    (p.negocio || "")
+      .toLowerCase()
+      .includes(texto)
 
-String(
-  p.precio || ""
-).includes(busqueda)
-```
+    ||
 
-);
+    String(
+      p.precio || ""
+    ).includes(busqueda)
+
+  );
 
 });
 
@@ -109,7 +110,7 @@ String(
       <div className="tablaContainer">
 
 
-        <div className="tablaContainer">
+      
 
           <table className="tabla">
 
@@ -166,7 +167,6 @@ String(
 
         </div>
 
-      )}
 
       {seleccionada && (
 
