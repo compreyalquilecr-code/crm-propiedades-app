@@ -33,45 +33,44 @@ function App() {
 
   }, []);
 
-  const filtradas =
-    propiedades.filter((p) => {
+  const filtradas = propiedades.filter((p) => {
 
-      if (
-        busqueda.trim() === ""
-      ) {
-        return false;
-      }
+if (busqueda.trim() === "") {
+return true;
+}
 
-      const texto =
-        busqueda.toLowerCase();
+const texto = busqueda.toLowerCase();
 
-      return (
+return (
 
-        (p.nombre || "")
-          .toLowerCase()
-          .includes(texto)
+```
+(p.nombre || "")
+  .toLowerCase()
+  .includes(texto)
 
-        ||
+||
 
-        (p.provincia || "")
-          .toLowerCase()
-          .includes(texto)
+(p.provincia || "")
+  .toLowerCase()
+  .includes(texto)
 
-        ||
+||
 
-        (p.negocio || "")
-          .toLowerCase()
-          .includes(texto)
+(p.negocio || "")
+  .toLowerCase()
+  .includes(texto)
 
-        ||
+||
 
-        String(
-          p.precio || ""
-        ).includes(busqueda)
+String(
+  p.precio || ""
+).includes(busqueda)
+```
 
-      );
+);
 
-    });
+});
+
 
   return (
 
@@ -104,7 +103,8 @@ function App() {
 
       </div>
 
-      {busqueda.trim() !== "" && (
+      <div className="tablaContainer">
+
 
         <div className="tablaContainer">
 
