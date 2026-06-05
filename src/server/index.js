@@ -18,9 +18,9 @@ const DATABASE_ID = process.env.NOTION_DATABASE_ID;
 app.get("/propiedades", async (req, res) => {
   try {
 
-    const respuesta = await notion.databases.query({
-      database_id: DATABASE_ID
-    });
+   const respuesta = await notion.dataSources.query({
+  data_source_id: DATABASE_ID
+});
 
     const propiedades = respuesta.results.map((item) => {
 
