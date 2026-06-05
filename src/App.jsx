@@ -16,8 +16,11 @@ function App() {
 
       try {
 
-        const datos =
-          await getPropiedades();
+       const datos = await getPropiedades();
+
+console.log("DATOS RECIBIDOS:", datos);
+
+setPropiedades(datos);
 
         setPropiedades(datos);
 
@@ -35,8 +38,8 @@ function App() {
 
   const filtradas = propiedades.filter((p) => {
 
-if (busqueda.trim() === "") {
-return true;
+console.log("PROPIEDADES:", propiedades);
+console.log("BUSQUEDA:", busqueda);
 }
 
 const texto = busqueda.toLowerCase();
